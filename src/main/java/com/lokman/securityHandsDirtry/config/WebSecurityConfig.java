@@ -17,7 +17,7 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
-		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/**").hasAnyRole("USER"))
 		.httpBasic(Customizer.withDefaults())
 		.formLogin(form -> form.disable());
 

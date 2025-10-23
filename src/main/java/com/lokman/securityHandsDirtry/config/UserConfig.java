@@ -14,8 +14,21 @@ public class UserConfig {
 
 	@Bean
 	public UserDetailsService userDetailService() {
-		UserDetails user = User.builder().username("lokman").password("lokman").roles("USER").build();
-		return new InMemoryUserDetailsManager(user);
+		UserDetails lokman = User.builder().username("lokman")
+				.password("lokman")
+				.roles("ADMIN")
+				.build();
+		
+		UserDetails rupta = User.builder().username("rupta")
+				.password("rupta")
+				.roles("CALLCENTER")
+				.build();
+		
+		UserDetails asik = User.builder().username("ashik")
+				.password("ashik")
+				.build();
+		
+		return new InMemoryUserDetailsManager(lokman, rupta, asik);
 	}
 	
 	@Bean

@@ -17,7 +17,23 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/**").hasAnyRole("USER"))
+//		http.authorizeHttpRequests(auth -> auth.requestMatchers("/**").hasAnyRole("USER"))
+//		.httpBasic(Customizer.withDefaults())
+//		.formLogin(form -> form.disable());
+		
+		/**
+		 * 
+		 * securing end point based on roles(Inmemory)
+		 * 
+		 */
+		
+		http.authorizeHttpRequests(auth -> 
+		// Admin area
+		auth.requestMatchers("/api/admin/**").hasRole("ADMIN")
+		//callcenter aread
+		.requestMatchers("/api/callcenter/**").hasAnyRole("ADMIN", "CALLCENTER")
+		// Any other request → authenticated users only
+		.anyRequest().authenticated())
 		.httpBasic(Customizer.withDefaults())
 		.formLogin(form -> form.disable());
 

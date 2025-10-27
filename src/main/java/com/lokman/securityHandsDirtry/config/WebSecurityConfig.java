@@ -31,6 +31,7 @@ public class WebSecurityConfig {
 		// Any other request → authenticated users only
 		.anyRequest().authenticated())
 		.httpBasic(Customizer.withDefaults())
+		.csrf(csrf -> csrf.disable())
 		.formLogin(form -> form.disable())
 		// 403 handler
 		.exceptionHandling(ex -> ex

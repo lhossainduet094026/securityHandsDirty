@@ -1,39 +1,36 @@
 package com.lokman.securityHandsDirtry.repository.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import com.lokman.securityHandsDirtry.dto.UserDTO;
+import com.lokman.securityHandsDirtry.dto.UserAuthRow;
 import com.lokman.securityHandsDirtry.repository.UserRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // use real DB
-@ActiveProfiles("test")
 public class UserRepositoryTest {
 
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Test
-    @DisplayName("Should fetch user DTO by username from real DB (read-only)")
-    void testFindUserDTOByUsername() {
-        // 🔹 Suppose you already have a record in DB:
-        // username = 'lokman', password = 'secret', role = 'ADMIN'
+    @DisplayName("FETCH USER WITH ROLE AND AUTHORITIES")
+    void findUserAuthDataByEmailTest() {
 
-        Optional<UserDTO> result = userRepository.findUserDtoByUserName("lokman");
-        System.out.println(result);
-        UserDTO dto = result.get();
-        assertTrue(result.isPresent());
-
-        
+        String email = "lhossianduet094026@gmail.com";
+        List<UserAuthRow> users = userRepository.findUserAuthDataByEmail(email);
+       
+        assertFalse(users.isEmpty());
+        assertEquals("lhossianduet094026@gmail.com", users.get(0).getEmail());
+        System.out.println(users);
     }
 	
 }

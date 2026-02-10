@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.lokman.securityHandsDirtry.dto.SecurityUserDTO;
 
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -32,7 +31,7 @@ public class JwtUtil {
         .setSubject(user.getEmail())
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration()))
-        .signWith(jwtConfig.getSecret(), SignatureAlgorithm.HS512)
+        .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())
         .compact();
 		
 	}

@@ -3,8 +3,10 @@ package com.lokman.securityHandsDirtry.dto;
 import java.util.Set;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class SecurityUserDTO {
 
 	private String name;

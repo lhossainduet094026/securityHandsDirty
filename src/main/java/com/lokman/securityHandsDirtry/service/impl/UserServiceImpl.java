@@ -7,9 +7,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lokman.securityHandsDirtry.common.NotFoundException;
 import com.lokman.securityHandsDirtry.dto.SecurityUserDTO;
 import com.lokman.securityHandsDirtry.dto.UserAuthRow;
+import com.lokman.securityHandsDirtry.exceptions.NotFoundException;
 import com.lokman.securityHandsDirtry.repository.UserRepository;
 import com.lokman.securityHandsDirtry.service.UserService;
 

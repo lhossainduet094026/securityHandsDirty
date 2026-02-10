@@ -1,4 +1,4 @@
-package com.lokman.securityHandsDirtry.common;
+package com.lokman.securityHandsDirtry.exceptions;
 
 public class NotFoundException extends RuntimeException {
 	

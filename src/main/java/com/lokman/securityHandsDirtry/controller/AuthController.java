@@ -18,6 +18,8 @@ import com.lokman.securityHandsDirtry.exceptions.UnauthorizedException;
 import com.lokman.securityHandsDirtry.jwt.JwtUtil;
 import com.lokman.securityHandsDirtry.service.UserService;
 
+import jakarta.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -36,7 +38,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+	public ResponseEntity<?> login(@NotNull @RequestBody AuthRequest authRequest) {
 
 		SecurityUserDTO userDTO = userService.findUserAuthDataByEmail(authRequest.getEmail());
 

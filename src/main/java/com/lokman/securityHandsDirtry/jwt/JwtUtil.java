@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.lokman.securityHandsDirtry.dto.SecurityUserDTO;
@@ -35,4 +36,19 @@ public class JwtUtil {
         .compact();
 		
 	}
+	
+	public String extractUserName(String token) {
+		
+		return Jwts.parser().setSigningKey(jwtConfig.getSecret())
+		.parseClaimsJws(token)
+		.getBody()
+		.getSubject();
+	}
+
+	public boolean validateToken(String token, UserDetails userDetails) {
+		
+		return false;
+	} 
+	
+	
 }

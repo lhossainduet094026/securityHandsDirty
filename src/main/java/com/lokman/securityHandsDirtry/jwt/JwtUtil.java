@@ -34,7 +34,6 @@ public class JwtUtil {
         .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration()))
         .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())
         .compact();
-		
 	}
 	
 	public String extractUserName(String token) {
@@ -45,10 +44,23 @@ public class JwtUtil {
 		.getSubject();
 	}
 
-	public boolean validateToken(String token, UserDetails userDetails) {
-		
-		return false;
-	} 
+	public boolean validateToken(String token, UserDetails userDetails, String username) {
+
+		if (isTokenExpired(token))
+			return false;
+
+		return username.equals(userDetails.getUsername());
+
+	}
 	
-	
+	private boolean isTokenExpired(String token) {
+
+		return Jwts.parser()
+				.setSigningKey(jwtConfig.getSecret())
+				.parseClaimsJws(token)
+				.getBody()
+				.getExpiration()
+				.before(new Date());
+
+	}
 }

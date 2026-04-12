@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		// check extracted user is valid along with already authenticated
 		if (extractedUserName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(extractedUserName);
-			if (jwtUtil.validateToken(token, userDetails, extractedUserName)) {
+			if (jwtUtil.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken authToken =
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

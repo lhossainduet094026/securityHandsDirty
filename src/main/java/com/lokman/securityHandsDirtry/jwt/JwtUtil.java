@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.lokman.securityHandsDirtry.dto.SecurityUserDTO;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -26,7 +27,6 @@ public class JwtUtil {
 	public String generateToken(SecurityUserDTO user) {
 
 		Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", user.getRoles());
         
         return Jwts.builder().setClaims(claims)
         .setSubject(user.getEmail())
@@ -37,28 +37,21 @@ public class JwtUtil {
 	}
 	
 	public String extractUserName(String token) {
-		
-		return Jwts.parser().setSigningKey(jwtConfig.getSecret())
-		.parseClaimsJws(token)
-		.getBody()
-		.getSubject();
+		return getClaims(token).getSubject();
+	}
+	
+	private Claims getClaims(String token) {
+		return Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();
 	}
 
-	public boolean validateToken(String token, UserDetails userDetails, String username) {
-
-		if (isTokenExpired(token))
-			return false;
-
-		return username.equals(userDetails.getUsername());
-
+	public boolean validateToken(String token, UserDetails userDetails) {
+		String userName = getClaims(token).getSubject();
+		return userName.equals(userDetails.getUsername())
+				&& !isTokenExpired(token);
 	}
 	
 	private boolean isTokenExpired(String token) {
-
-		return Jwts.parser()
-				.setSigningKey(jwtConfig.getSecret())
-				.parseClaimsJws(token)
-				.getBody()
+		return getClaims(token)
 				.getExpiration()
 				.before(new Date());
 

@@ -3,11 +3,14 @@ package com.lokman.securityHandsDirtry.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.lokman.securityHandsDirtry.jwt.JwtAuthenticationFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class WebSecurityConfig {
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
 		
 		/**
 		 * 
@@ -26,7 +29,10 @@ public class WebSecurityConfig {
 		 * 
 		 */
 		
-		http.authorizeHttpRequests(auth -> 
+		http
+		.csrf(csrf -> csrf.disable())
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
+		.authorizeHttpRequests(auth -> 
 		// Admin area
 		auth.requestMatchers("/api/admin/**").hasRole("ADMIN")
 		//callcenter aread
@@ -37,8 +43,8 @@ public class WebSecurityConfig {
 		.requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
 		// Any other request → authenticated users only
 		.anyRequest().authenticated())
-		.httpBasic(Customizer.withDefaults())
-		.csrf(csrf -> csrf.disable())
+		.httpBasic(httpBasic -> httpBasic.disable()) 
+		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 		.formLogin(form -> form.disable())
 		// 403 handler
 		.exceptionHandling(ex -> ex
